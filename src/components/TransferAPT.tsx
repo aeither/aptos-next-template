@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 // Internal components
 import { transferAPT } from '@/entry-functions/transferAPT'
-import { toast } from '@/hooks/use-toast'
 import { aptosClient, callFaucet } from '@/utils/aptosClient'
 import { parseAptos } from '@/utils/units'
 import { getAccountAPTBalance } from '@/view-functions/getAccountBalance'
@@ -12,6 +11,7 @@ import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import { ToastAction } from '@radix-ui/react-toast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export function TransferAPT() {
 	const { account, signAndSubmitTransaction } = useWallet()
@@ -38,9 +38,7 @@ export function TransferAPT() {
 					balance
 				}
 			} catch (error: any) {
-				toast({
-					variant: 'destructive',
-					title: 'Error',
+				toast.error('Error', {
 					description: error
 				})
 				return {
@@ -67,8 +65,7 @@ export function TransferAPT() {
 				transactionHash: committedTransaction.hash
 			})
 			queryClient.invalidateQueries()
-			toast({
-				title: 'Success',
+			toast('Success', {
 				description: `Transaction succeeded, hash: ${executedTransaction.hash}`
 			})
 		} catch (error) {
@@ -82,8 +79,7 @@ export function TransferAPT() {
 			transactionHash: hashes as unknown as string
 		})
 		queryClient.invalidateQueries()
-		toast({
-			title: 'Transaction sent',
+		toast('Transaction sent', {
 			action: (
 				<ToastAction
 					altText="View Hash"
