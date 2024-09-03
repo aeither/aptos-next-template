@@ -1,23 +1,23 @@
-require("dotenv").config();
-const axios = require("axios");
-const fs = require("node:fs");
+require('dotenv').config()
+const axios = require('axios')
+const fs = require('node:fs')
 
-const moduleName = "aptos_friend";
+const moduleName = 'aptos_friend'
 
-const url = `https://fullnode.${process.env.VITE_APP_NETWORK}.aptoslabs.com/v1/accounts/${process.env.VITE_MODULE_ADDRESS}/module/${moduleName}`;
+const url = `https://fullnode.${process.env.NEXT_PUBLIC_APP_NETWORK}.aptoslabs.com/v1/accounts/${process.env.NEXT_PUBLIC_MODULE_ADDRESS}/module/${moduleName}`
 
 async function getAbi() {
 	axios
 		.get(url)
 		.then((response) => {
-			const abi = response.data.abi;
-			const abiString = `export const ABI = ${JSON.stringify(abi)} as const;`;
-			fs.writeFileSync("frontend/utils/abi.ts", abiString);
-			console.log("ABI saved to frontend/utils/abi.ts");
+			const abi = response.data.abi
+			const abiString = `export const ABI = ${JSON.stringify(abi)} as const;`
+			fs.writeFileSync('frontend/utils/abi.ts', abiString)
+			console.log('ABI saved to frontend/utils/abi.ts')
 		})
 		.catch((error) => {
-			console.error("Error fetching ABI:", error);
-		});
+			console.error('Error fetching ABI:', error)
+		})
 }
 
-getAbi();
+getAbi()

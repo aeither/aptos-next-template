@@ -5,8 +5,9 @@ const cli = require('@aptos-labs/ts-sdk/dist/common/cli/index.js')
 
 const config = yaml.load(fs.readFileSync('./.aptos/config.yaml', 'utf8'))
 const accountAddress =
-	config.profiles[`${process.env.PROJECT_NAME}-${process.env.VITE_APP_NETWORK}`]
-		.account
+	config.profiles[
+		`${process.env.PROJECT_NAME}-${process.env.NEXT_PUBLIC_APP_NETWORK}`
+	].account
 
 async function publish() {
 	const move = new cli.Move()
@@ -19,7 +20,7 @@ async function publish() {
 				// Publish module to new object, but since we create the object on the fly, we fill in the publisher's account address here
 				message_board_addr: accountAddress
 			},
-			profile: `${process.env.PROJECT_NAME}-${process.env.VITE_APP_NETWORK}`,
+			profile: `${process.env.PROJECT_NAME}-${process.env.NEXT_PUBLIC_APP_NETWORK}`,
 			extraArguments: ['--skip-fetch-latest-git-deps', '--assume-yes']
 		})
 		.then((response) => {
@@ -31,11 +32,11 @@ async function publish() {
 				envContent = fs.readFileSync(filePath, 'utf8')
 			}
 
-			// Regular expression to match the VITE_MODULE_ADDRESS variable
-			const regex = /^VITE_MODULE_ADDRESS=.*$/m
-			const newEntry = `VITE_MODULE_ADDRESS=${response.objectAddress}`
+			// Regular expression to match the NEXT_PUBLIC_MODULE_ADDRESS variable
+			const regex = /^NEXT_PUBLIC_MODULE_ADDRESS=.*$/m
+			const newEntry = `NEXT_PUBLIC_MODULE_ADDRESS=${response.objectAddress}`
 
-			// Check if VITE_MODULE_ADDRESS is already defined
+			// Check if NEXT_PUBLIC_MODULE_ADDRESS is already defined
 			if (envContent.match(regex)) {
 				// If the variable exists, replace it with the new value
 				envContent = envContent.replace(regex, newEntry)
