@@ -2,10 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useTransferCoin } from '@/hooks/transferAPT'
+import { useTransferCoin } from '@/hooks/entry/useTransferCoin'
 import { aptosClient, callFaucet } from '@/utils/aptosClient'
 import { parseAptos } from '@/utils/units'
-import { getAccountAPTBalance } from '@/view-functions/getAccountBalance'
 import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import { ToastAction } from '@radix-ui/react-toast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
