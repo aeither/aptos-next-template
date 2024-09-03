@@ -2,44 +2,40 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useWriteMessage } from '@/hooks/writeMessage'
-import { useViewMessageContent } from '@/view-functions/getMessageContent'
-import { useWallet } from '@aptos-labs/wallet-adapter-react'
-import { useState } from 'react'
+import { useWriteMessage } from '@/hooks/entry/useWriteMessage'
+import { useViewMessageContent } from '@/hooks/view/useViewMessageContent'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+const formSchema = z.object({
+	message: z.string().min(2).max(300)
+})
 
 export function MessageBoard() {
-	const { account } = useWallet()
-	const [newMessageContent, setNewMessageContent] = useState<string>()
 	const { data } = useViewMessageContent()
 	const writeMessage = useWriteMessage()
+	const {
+		register,
+		handleSubmit,
+		formState: { isSubmitting, isDirty, isValid }
+	} = useForm<z.infer<typeof formSchema>>()
 
-	const onClickButton = async () => {
-		if (!account || !newMessageContent) {
-			return
-		}
-		writeMessage.mutate({ message: newMessageContent })
+	const onSubmit = (values: z.infer<typeof formSchema>) => {
+		writeMessage.mutate({ message: values.message })
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
-			<h4 className="text-lg font-medium">Message content: {data?.content}</h4>
-			New message{' '}
-			<Input
-				disabled={!account}
-				placeholder="yoho"
-				onChange={(e) => setNewMessageContent(e.target.value)}
-			/>
-			<Button
-				disabled={
-					!account ||
-					!newMessageContent ||
-					newMessageContent.length === 0 ||
-					newMessageContent.length > 100
-				}
-				onClick={onClickButton}
-			>
-				Write
-			</Button>
-		</div>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className="flex flex-col gap-6">
+				<h4 className="text-lg font-medium">
+					Message content: {data?.content}
+				</h4>
+				<span>New message</span>
+				<Input placeholder="yoho" {...register('message')} />
+				<Button type="submit" disabled={!isDirty || !isValid}>
+					{isSubmitting ? 'Writing...' : 'Write'}
+				</Button>
+			</div>
+		</form>
 	)
 }
