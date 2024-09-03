@@ -20,7 +20,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { toast } from '@/hooks/use-toast'
 import {
 	APTOS_CONNECT_ACCOUNT_URL,
 	AboutAptosConnect,
@@ -43,6 +42,7 @@ import {
 	User
 } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import { toast } from 'sonner'
 
 export function WalletSelector() {
 	const { account, connected, disconnect, wallet } = useWallet()
@@ -54,14 +54,11 @@ export function WalletSelector() {
 		if (!account?.address) return
 		try {
 			await navigator.clipboard.writeText(account.address)
-			toast({
-				title: 'Success',
+			toast('Success', {
 				description: 'Copied wallet address to clipboard.'
 			})
 		} catch {
-			toast({
-				variant: 'destructive',
-				title: 'Error',
+			toast.error('Error', {
 				description: 'Failed to copy wallet address.'
 			})
 		}

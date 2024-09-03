@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { AccountInfo } from "@/components/AccountInfo";
-import { Header } from "@/components/Header";
-import { MessageBoard } from "@/components/MessageBoard";
-import { NetworkInfo } from "@/components/NetworkInfo";
-import { TransferAPT } from "@/components/TransferAPT";
-import { WalletDetails } from "@/components/WalletDetails";
+import { AccountInfo } from '@/components/AccountInfo'
+import { Header } from '@/components/Header'
+import { MessageBoard } from '@/components/MessageBoard'
+import { NetworkInfo } from '@/components/NetworkInfo'
+import { TransferAPT } from '@/components/TransferAPT'
+import { WalletDetails } from '@/components/WalletDetails'
 // Internal Components
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useWallet } from '@aptos-labs/wallet-adapter-react'
 
 function App() {
-	const { connected } = useWallet();
+	const { connected } = useWallet()
 
 	return (
 		<>
@@ -34,7 +34,7 @@ function App() {
 				)}
 			</div>
 		</>
-	);
+	)
 }
 
-export default App;
+export default App

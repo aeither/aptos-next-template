@@ -1,5 +1,5 @@
+import { Toaster } from '@/components/ui/sonner'
 import { WalletProvider } from '@/components/WalletProvider.tsx'
-import { Toaster } from '@/components/ui/toaster'
 import QueryProvider from '@/lib/providers'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -23,7 +23,7 @@ export default function RootLayout({
 				<WalletProvider>
 					<QueryProvider>
 						<main id="root">{children}</main>
-						<Toaster />
+						<Toaster richColors position="top-right" />
 					</QueryProvider>
 				</WalletProvider>
 			</body>
