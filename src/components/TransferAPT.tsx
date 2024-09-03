@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 // Internal components
-import { transferAPT } from '@/entry-functions/transferAPT'
+import { useTransferCoin } from '@/entry-functions/transferAPT'
 import { aptosClient, callFaucet } from '@/utils/aptosClient'
 import { parseAptos } from '@/utils/units'
 import { getAccountAPTBalance } from '@/view-functions/getAccountBalance'
@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 export function TransferAPT() {
 	const { account, signAndSubmitTransaction } = useWallet()
 	const queryClient = useQueryClient()
+	const transferMutation = useTransferCoin()
 
 	const [recipient, setRecipient] = useState<string>()
 	const [transferAmount, setTransferAmount] = useState<number>()
@@ -54,19 +55,9 @@ export function TransferAPT() {
 		}
 
 		try {
-			const committedTransaction = await signAndSubmitTransaction(
-				transferAPT({
-					to: recipient,
-					// APT is 8 decimal places
-					amount: 10 ** 8 * transferAmount
-				})
-			)
-			const executedTransaction = await aptosClient().waitForTransaction({
-				transactionHash: committedTransaction.hash
-			})
-			queryClient.invalidateQueries()
-			toast('Success', {
-				description: `Transaction succeeded, hash: ${executedTransaction.hash}`
+			await transferMutation.mutate({
+				to: recipient as `0x${string}`,
+				amount: transferAmount * 1e8 // Convert to Octas
 			})
 		} catch (error) {
 			console.error(error)
