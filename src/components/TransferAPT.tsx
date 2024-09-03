@@ -3,11 +3,12 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTransferCoin } from '@/hooks/entry/useTransferCoin'
+import { useAccountAPTBalance } from '@/hooks/view/useAccountAPTBalance'
 import { aptosClient, callFaucet } from '@/utils/aptosClient'
 import { parseAptos } from '@/utils/units'
 import { useWallet } from '@aptos-labs/wallet-adapter-react'
 import { ToastAction } from '@radix-ui/react-toast'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -15,37 +16,11 @@ export function TransferAPT() {
 	const { account } = useWallet()
 	const queryClient = useQueryClient()
 	const transferMutation = useTransferCoin()
-
+	const { data } = useAccountAPTBalance({
+		accountAddress: account?.address as `0x${string}`
+	})
 	const [recipient, setRecipient] = useState<string>()
 	const [transferAmount, setTransferAmount] = useState<number>()
-
-	const { data } = useQuery({
-		queryKey: ['apt-balance', account?.address],
-		refetchInterval: 10_000,
-		enabled: !!account,
-		queryFn: async () => {
-			try {
-				if (account === null) {
-					console.error('Account not available')
-				}
-
-				const balance = await getAccountAPTBalance({
-					accountAddress: account!.address
-				})
-
-				return {
-					balance
-				}
-			} catch (error: any) {
-				toast.error('Error', {
-					description: error
-				})
-				return {
-					balance: 0
-				}
-			}
-		}
-	})
 
 	const doTransfer = async () => {
 		if (!account || !recipient || !transferAmount) {
