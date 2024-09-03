@@ -2,8 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-// Internal components
-import { useTransferCoin } from '@/entry-functions/transferAPT'
+import { useTransferCoin } from '@/hooks/transferAPT'
 import { aptosClient, callFaucet } from '@/utils/aptosClient'
 import { parseAptos } from '@/utils/units'
 import { getAccountAPTBalance } from '@/view-functions/getAccountBalance'
@@ -14,7 +13,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 export function TransferAPT() {
-	const { account, signAndSubmitTransaction } = useWallet()
+	const { account } = useWallet()
 	const queryClient = useQueryClient()
 	const transferMutation = useTransferCoin()
 
