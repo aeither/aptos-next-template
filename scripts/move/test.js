@@ -9,7 +9,8 @@ async function test() {
 		packageDirectoryPath: 'move',
 		namedAddresses: {
 			message_board_addr: '0x100'
-		}
+		},
+		extraArguments: ['--skip-fetch-latest-git-deps']
 	})
 }
 test()
